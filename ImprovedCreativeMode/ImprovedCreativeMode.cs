@@ -8,7 +8,6 @@ namespace ImprovedCreativeMode
     [BepInProcess("valheim.exe")]
     public class ImprovedCreativeMode : BaseUnityPlugin
     {
-
         private const string PluginGUID = "com.github.kparkins.ImprovedCreativeMode";
         private const string PluginName = "ImprovedCreativeMode";
         private const string PluginVersion = "1.0.0";
