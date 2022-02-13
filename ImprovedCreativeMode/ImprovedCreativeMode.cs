@@ -9,11 +9,11 @@ namespace ImprovedCreativeMode
     public class ImprovedCreativeMode : BaseUnityPlugin
     {
 
-        private const string PluginGUID = "io.kparkins.ImprovedCreativeMode";
+        private const string PluginGUID = "com.github.kparkins.ImprovedCreativeMode";
         private const string PluginName = "ImprovedCreativeMode";
-        private const string PluginVersion = "2.0.0";
+        private const string PluginVersion = "1.0.0";
 
-        private readonly Harmony harmony = new Harmony("io.kparkins.ImprovedCreativeMode");
+        private readonly Harmony harmony = new Harmony("com.github.kparkins.ImprovedCreativeMode");
 
         private void Awake()
         {
@@ -26,7 +26,6 @@ namespace ImprovedCreativeMode
         {
             static bool Prefix(ref bool __result, ref bool ___m_debugMode, ref float ___m_stamina, ref float ___m_maxStamina)
             {
-                Debug.Log("Calling prefix HaveStamina method.");
                 if (___m_debugMode && Console.instance.IsCheatsEnabled())
                 {
                     __result = true;
