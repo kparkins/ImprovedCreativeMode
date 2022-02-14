@@ -10,7 +10,8 @@ namespace ImprovedCreativeMode
     {
         private const string PluginGUID = "com.github.kparkins.ImprovedCreativeMode";
         private const string PluginName = "ImprovedCreativeMode";
-        private const string PluginVersion = "1.0.0";
+        private const string PluginVersion = "1.1.0";
+        private static bool m_noPlacementCost = false;
 
         private readonly Harmony harmony = new Harmony("com.github.kparkins.ImprovedCreativeMode");
 
@@ -29,6 +30,28 @@ namespace ImprovedCreativeMode
                 {
                     __result = true;
                     ___m_stamina = ___m_maxStamina;
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(Player), nameof(Player.ToggleNoPlacementCost))]
+        class ToggleNoPlacementCost
+        {
+            static void Postfix(ref bool __result)
+            {
+                m_noPlacementCost = __result;
+            }
+        }
+
+        [HarmonyPatch(typeof(Piece), nameof(Piece.DropResources))]
+        class DropResourcesPatch
+        {
+            static bool Prefix()
+            {
+                if(m_noPlacementCost && Player.m_debugMode && Console.instance.IsCheatsEnabled())
+                {
                     return false;
                 }
                 return true;
