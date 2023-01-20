@@ -40,13 +40,13 @@ namespace ImprovedCreativeMode
         [HarmonyPatch("UpdatePlacement")]
         class UpdatePlacementPatch
         {
-            private static float m_rightItemDurability = -1;
+            private const float INVALID_DURABILITY = -1;
+            private static float m_rightItemDurability = INVALID_DURABILITY;
             static bool Prefix(Player __instance, ref bool ___m_debugMode, bool takeInput, float dt)
             {
                 if(___m_debugMode && Console.instance.IsCheatsEnabled() && __instance.InPlaceMode())
                 {
                     var item = __instance.GetRightItem();
-                    
                     if (item != null && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Tool)
                     {
                         m_rightItemDurability = item.m_durability;
@@ -59,10 +59,10 @@ namespace ImprovedCreativeMode
                 if (___m_debugMode && Console.instance.IsCheatsEnabled() && __instance.InPlaceMode())
                 {
                     var item = __instance.GetRightItem();
-                    if (m_rightItemDurability != -1 && item != null && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Tool)
+                    if (m_rightItemDurability != INVALID_DURABILITY && item != null && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Tool)
                     {
                         item.m_durability = m_rightItemDurability;
-                        m_rightItemDurability = -1;
+                        m_rightItemDurability = INVALID_DURABILITY;
                     }
                 }
             }
