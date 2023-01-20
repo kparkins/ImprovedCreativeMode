@@ -10,7 +10,7 @@ namespace ImprovedCreativeMode
     {
         private const string PluginGUID = "com.github.kparkins.ImprovedCreativeMode";
         private const string PluginName = "ImprovedCreativeMode";
-        private const string PluginVersion = "1.1.0";
+        private const string PluginVersion = "1.2.0";
         private static bool m_noPlacementCost = false;
 
         private readonly Harmony harmony = new Harmony("com.github.kparkins.ImprovedCreativeMode");
@@ -33,6 +33,37 @@ namespace ImprovedCreativeMode
                     return false;
                 }
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(Player))]
+        [HarmonyPatch("UpdatePlacement")]
+        class UpdatePlacementPatch
+        {
+            private static float m_rightItemDurability = 0;
+            static bool Prefix(Player __instance, ref bool ___m_debugMode, bool takeInput, float dt)
+            {
+                if(___m_debugMode && Console.instance.IsCheatsEnabled() && __instance.InPlaceMode())
+                {
+                    var item = __instance.GetRightItem();
+                    
+                    if (item != null && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Tool)
+                    {
+                        m_rightItemDurability = item.m_durability;
+                    }
+                }
+                return true;
+            }
+            static void Postfix(Player __instance, ref bool ___m_debugMode, bool takeInput, float dt)
+            {
+                if (___m_debugMode && Console.instance.IsCheatsEnabled() && __instance.InPlaceMode())
+                {
+                    var item = __instance.GetRightItem();
+                    if (item != null && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Tool)
+                    {
+                        item.m_durability = m_rightItemDurability;
+                    }
+                }
             }
         }
 
