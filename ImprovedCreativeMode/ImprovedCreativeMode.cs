@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using HarmonyLib;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ namespace ImprovedCreativeMode
     {
         private const string PluginGUID = "com.github.kparkins.ImprovedCreativeMode";
         private const string PluginName = "ImprovedCreativeMode";
-        private const string PluginVersion = "1.2.0";
+        private const string PluginVersion = "1.2.1";
         private static bool m_noPlacementCost = false;
 
         private readonly Harmony harmony = new Harmony("com.github.kparkins.ImprovedCreativeMode");
@@ -46,7 +46,8 @@ namespace ImprovedCreativeMode
             {
                 if(___m_debugMode && Console.instance.IsCheatsEnabled() && __instance.InPlaceMode())
                 {
-                    var item = __instance.GetRightItem();
+                    var method = AccessTools.Method(typeof(Player), "GetRightItem");
+                    var item = (ItemDrop.ItemData) method.Invoke(__instance, null);
                     if (item != null && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Tool)
                     {
                         m_rightItemDurability = item.m_durability;
@@ -58,7 +59,8 @@ namespace ImprovedCreativeMode
             {
                 if (___m_debugMode && Console.instance.IsCheatsEnabled() && __instance.InPlaceMode())
                 {
-                    var item = __instance.GetRightItem();
+                    var method = AccessTools.Method(typeof(Player), "GetRightItem");
+                    var item = (ItemDrop.ItemData)method.Invoke(__instance, null);
                     if (m_rightItemDurability != INVALID_DURABILITY && item != null && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Tool)
                     {
                         item.m_durability = m_rightItemDurability;
